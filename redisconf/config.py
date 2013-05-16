@@ -31,7 +31,7 @@ class Config(object):
         Usage: 
             questions = []
             questions.append({'key':'mongodb_host',"question':'What is mongodb's host?"})
-            questions.append({'key':'mongodb_port',"question':'What is mongodb's port?"})
+            questions.append({'key':'mongodb_port',"question':'What is mongodb's port?", 'default':27017})
             questions.append({'key':'mongodb_pass',"question':'What is mongodb's password?", 'is_password':True})
             conf.configureEnvironment(questions)
         '''
@@ -40,6 +40,9 @@ class Config(object):
                 value = getpass.getpass(question_data['question']+": ")
             else:
                 value = raw_input(question_data['question']+": ")
+            if not value:
+                if question_data.has_key('default') and question_data['default']:
+                    value = question_data['default']
             self.setConf(question_data['key'], value)
         return
 
