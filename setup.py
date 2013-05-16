@@ -18,7 +18,7 @@ Basic module to store environment configuration on redis""",
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          # -*- Extra requirements: -*-
+          "redis"
       ],
       entry_points="""
       # -*- Entry points: -*-
