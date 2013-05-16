@@ -14,16 +14,16 @@ Execute the following commands:
 
 # Basic Usage
 
-from redisconf.config import Config
+    from redisconf.config import Config
 
-conf = Config('namespace')
-conf.setConf('keyname', 'value')
-conf.getConf('keyname')
+    conf = Config('namespace')
+    conf.setConf('keyname', 'value')
+    conf.getConf('keyname')
 
-questions = []
-questions.append({'key':'mongodb_host','question':"What is mongodb's host?"})
-questions.append({'key':'mongodb_port','question':"What is mongodb's port?"})
-questions.append({'key':'mongodb_pass','question':"What is mongodb's password?", 'is_password':True})
-conf.configureEnvironment(questions)
+    questions = []
+    questions.append({'key':'mongodb_host','question':"What is mongodb's host?"})
+    questions.append({'key':'mongodb_port','question':"What is mongodb's port?"})
+    questions.append({'key':'mongodb_pass','question':"What is mongodb's password?", 'is_password':True})
+    conf.configureEnvironment(questions)
 
-conf.getEnvironmentConfig()
+    conf.getEnvironmentConfig()
