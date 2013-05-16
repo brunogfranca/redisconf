@@ -50,5 +50,5 @@ class Config(object):
         keys = self.conn.keys(self.namespace+'.*')
         conf = {}
         for key in keys:
-            conf[key] = self.conn.get(key)
+            conf[key.replace(self.namespace+'.', '')] = self.conn.get(key)
         return conf
