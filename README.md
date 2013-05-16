@@ -22,7 +22,7 @@ Execute the following commands:
 
     questions = []
     questions.append({'key':'mongodb_host','question':"What is mongodb's host?"})
-    questions.append({'key':'mongodb_port','question':"What is mongodb's port?"})
+    questions.append({'key':'mongodb_port','question':"What is mongodb's port? (27017)", 'default':27017})
     questions.append({'key':'mongodb_pass','question':"What is mongodb's password?", 'is_password':True})
     conf.configureEnvironment(questions)
 
