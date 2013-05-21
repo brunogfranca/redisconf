@@ -36,24 +36,42 @@ class Config(object):
             conf.configureEnvironment(questions)
         '''
         for question_data in setup_info:
+            # Set vars
+            key = question_data['key']
+            is_password = False
+            if question_data.has_key('is_password'):
+                is_password = question_data['is_password']
+            keep_default = False
+            if question_data.has_key('keep_default'):
+                keep_default = question_data['keep_default']
+            default = False
+            if question_data.has_key('default'):
+                default = question_data['default']
+            question = question_data['question']
+            
             # Include default values on question
-            if question_data.has_key('keep_default') and question_data['keep_default']:
-                old_value = self.getConf(question_data['key'])
-                question_data['question'] += ' (DEFAULT: '+old_value+')'
-            elif question_data.has_key('default') and question_data['default']:
-                question_data['question'] += ' (DEFAULT: '+str(question_data['default'])+')'
+            if keep_default:
+                if is_password:
+                    old_value = 'OLD PASSWORD'
+                else:
+                    old_value = self.getConf(key)
+                question += ' (DEFAULT: '+old_value+')'
+            elif default:
+                question += ' (DEFAULT: '+str(default)+')'
+            
             # Is Password
-            if question_data.has_key('is_password') and question_data['is_password']:
-                value = getpass.getpass(question_data['question']+": ")
+            if is_password:
+                value = getpass.getpass(question+": ")
             else:
-                value = raw_input(question_data['question']+": ")
+                value = raw_input(question+": ")
+            
             # Set Default Value
             if not value:
-                if question_data.has_key('keep_default') and question_data['keep_default']:
+                if keep_default:
                     continue
-                elif question_data.has_key('default') and question_data['default']:
-                    value = question_data['default']
-            self.setConf(question_data['key'], value)
+                elif default:
+                    value = default
+            self.setConf(key, value)
         return
 
     def getEnvironmentConfig(self):
