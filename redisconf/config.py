@@ -8,9 +8,9 @@ Basic Usage:
     conf.getConf('keyname')
 
     questions = []
-    questions.append({'key':'mongodb_host','question':"What is mongodb's host?", 'keep_default':True})
-    questions.append({'key':'mongodb_port','question':"What is mongodb's port?", 'default':27017})
-    questions.append({'key':'mongodb_pass','question':"What is mongodb's password?", 'is_password':True})
+    questions.append({'key':'mongodb_host','question':"mongodb's host"})
+    questions.append({'key':'mongodb_port','question':"mongodb's port", 'default':27017})
+    questions.append({'key':'mongodb_pass','question':"mongodb's password", 'is_password':True})
     conf.configureEnvironment(questions)
 
     conf.getEnvironmentConfig()
@@ -30,9 +30,9 @@ class Config(object):
         '''
         Usage: 
             questions = []
-            questions.append({'key':'mongodb_host','question':"What is mongodb's host?", 'keep_default':True})
-            questions.append({'key':'mongodb_port','question':"What is mongodb's port?", 'default':27017})
-            questions.append({'key':'mongodb_pass','question':"What is mongodb's password?", 'is_password':True})
+            questions.append({'key':'mongodb_host','question':"mongodb's host"})
+            questions.append({'key':'mongodb_port','question':"mongodb's port", 'default':27017})
+            questions.append({'key':'mongodb_pass','question':"mongodb's password", 'is_password':True})
             conf.configureEnvironment(questions)
         '''
         for question_data in setup_info:
@@ -41,35 +41,39 @@ class Config(object):
             is_password = False
             if question_data.has_key('is_password'):
                 is_password = question_data['is_password']
-            keep_default = False
-            if question_data.has_key('keep_default'):
-                keep_default = question_data['keep_default']
             default = False
             if question_data.has_key('default'):
                 default = question_data['default']
             question = question_data['question']
             
-            # Include default values on question
-            if keep_default:
-                old_value = self.getConf(key)
-                if old_value:
-                    if is_password:
-                        old_value = 'OLD PASSWORD'
-                    question += ' (DEFAULT: '+old_value+')'
-            elif default:
-                question += ' (DEFAULT: '+str(default)+')'
-            
-            # Is Password
-            if is_password:
-                value = getpass.getpass(question+": ")
-            else:
-                value = raw_input(question+": ")
+            # Check if the user wants to change the current value
+            change = 'Y'
+            old_value = self.getConf(key)
+            if old_value:
+                change_question = 'Do you want to change the current value for '+question+'?'
+                if is_password:
+                    old_value = 'OLD PASSWORD'
+                change_question += ' ('+old_value+')'
+                change_question += ' [y/N]'
+                change = raw_input(change_question)
+                if change == '':
+                    change = 'N'
+                while change.lower() not in ['y', 'n']:
+                    change = raw_input(change_question)
+                    if change == '':
+                        change = 'N'
+
+            value = ''
+            if change.lower() == 'y':
+                # Is Password
+                if is_password:
+                    value = getpass.getpass(question+": ")
+                else:
+                    value = raw_input(question+": ")
             
             # Set Default Value
             if not value:
-                if keep_default:
-                    continue
-                elif default:
+                if default:
                     value = default
             self.setConf(key, value)
         return
