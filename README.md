@@ -16,9 +16,9 @@ Basic module to store environment configuration on redis
     conf.getConf('keyname')
 
     questions = []
-    questions.append({'key':'mongodb_host','question':"What is mongodb's host?"})
-    questions.append({'key':'mongodb_port','question':"What is mongodb's port?", 'default':27017})
-    questions.append({'key':'mongodb_pass','question':"What is mongodb's password?", 'is_password':True})
+    questions.append({'key':'mongodb_host','question':"mongodb's host?"})
+    questions.append({'key':'mongodb_port','question':"mongodb's port?", 'default':27017})
+    questions.append({'key':'mongodb_pass','question':"mongodb's password?", 'is_password':True})
     conf.configureEnvironment(questions)
 
     conf.getEnvironmentConfig()
