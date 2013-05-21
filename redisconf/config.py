@@ -71,11 +71,11 @@ class Config(object):
                 else:
                     value = raw_input(question+": ")
             
-            # Set Default Value
-            if not value:
-                if default:
-                    value = default
-            self.setConf(key, value)
+                # Set Default Value
+                if not value:
+                    if default:
+                        value = default
+                self.setConf(key, value)
         return
 
     def getEnvironmentConfig(self):
