@@ -51,12 +51,12 @@ class Config(object):
             
             # Include default values on question
             if keep_default:
-                old_value = ''
                 if is_password:
                     old_value = 'OLD PASSWORD'
                 else:
                     old_value = self.getConf(key)
-                question += ' (DEFAULT: '+old_value+')'
+                if old_value:
+                    question += ' (DEFAULT: '+old_value+')'
             elif default:
                 question += ' (DEFAULT: '+str(default)+')'
             
