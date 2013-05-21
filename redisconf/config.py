@@ -51,6 +51,7 @@ class Config(object):
             
             # Include default values on question
             if keep_default:
+                old_value = ''
                 if is_password:
                     old_value = 'OLD PASSWORD'
                 else:
