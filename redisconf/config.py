@@ -69,6 +69,8 @@ class Config(object):
                 if is_password:
                     value = getpass.getpass(question+": ")
                 else:
+                    if default:
+                        question += ' ('+default+')'
                     value = raw_input(question+": ")
             
                 # Set Default Value
