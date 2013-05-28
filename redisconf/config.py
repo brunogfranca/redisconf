@@ -70,7 +70,7 @@ class Config(object):
                     value = getpass.getpass(question+": ")
                 else:
                     if default:
-                        question += ' ('+default+')'
+                        question += ' ('+str(default)+')'
                     value = raw_input(question+": ")
             
                 # Set Default Value
