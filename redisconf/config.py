@@ -1,24 +1,26 @@
 import getpass
 import redis
 
-'''
-Basic Usage: 
-    conf = Config('namespace')
-    conf.setConf('keyname', 'value')
-    conf.getConf('keyname')
 
-    questions = []
-    questions.append({'key':'mongodb_host','question':"mongodb's host"})
-    questions.append({'key':'mongodb_port','question':"mongodb's port", 'default':27017})
-    questions.append({'key':'mongodb_pass','question':"mongodb's password", 'is_password':True})
-    conf.configureEnvironment(questions)
-
-    conf.getEnvironmentConfig()
-'''
 class Config(object):
-    def __init__(self, namespace):
+    '''
+    Basic Usage:
+        conf = Config('namespace')
+        conf.setConf('keyname', 'value')
+        conf.getConf('keyname')
+
+        questions = []
+        questions.append({'key':'mongodb_host','question':"mongodb's host"})
+        questions.append({'key':'mongodb_port','question':"mongodb's port", 'default':27017})
+        questions.append({'key':'mongodb_pass','question':"mongodb's password", 'is_password':True})
+        conf.configureEnvironment(questions)
+
+        conf.getEnvironmentConfig()
+    '''
+
+    def __init__(self, namespace, **redisconfs):
         self.namespace = namespace
-        self.conn = redis.StrictRedis(host='localhost', port=6379, db=0)
+        self.conn = redis.StrictRedis(**redisconfs)
 
     def setConf(self, key, value):
         return self.conn.set(self.namespace+'.'+key, value)
@@ -28,7 +30,7 @@ class Config(object):
 
     def configureEnvironment(self, setup_info):
         '''
-        Usage: 
+        Usage:
             questions = []
             questions.append({'key':'mongodb_host','question':"mongodb's host"})
             questions.append({'key':'mongodb_port','question':"mongodb's port", 'default':27017})
@@ -45,7 +47,7 @@ class Config(object):
             if question_data.has_key('default'):
                 default = question_data['default']
             question = question_data['question']
-            
+
             # Check if the user wants to change the current value
             change = 'Y'
             old_value = self.getConf(key)
@@ -72,7 +74,7 @@ class Config(object):
                     if default:
                         question += ' ('+str(default)+')'
                     value = raw_input(question+": ")
-            
+
                 # Set Default Value
                 if not value:
                     if default:
